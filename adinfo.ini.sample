@@ -1,0 +1,5 @@
+[ldap]
+url = ldaps://myserver.user.uu.se:636
+user = serviceuser@domain.local
+password = fruppleplam
+baseDN = "DC=user,DC=foobar,DC=com"
