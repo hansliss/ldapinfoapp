@@ -56,36 +56,59 @@ class ldapinfo {
     return $result;
   }
 
-  function getldapinfo($username, $fields) {
+  function getUserInfo($username, $fields) {
     $filter="(samAccountName=$username)";
     $sr=ldap_search($this->ldapconn, $this->ldapbaseDN, $filter, $fields);
     if (!$sr) die("Search failed\n");
     $entries = ldap_get_entries($this->ldapconn, $sr);
 
-    foreach (array_keys($entries) as $ekey) {
-      if (is_array($entries[$ekey])) {
-        if (in_array("objectguid", $entries[$ekey])) {
-          for($i = 0; $i < $entries[$ekey]["objectguid"]["count"]; $i++) {
-	    $res = $this->GUIDtoStr($entries[$ekey]["objectguid"][$i]);
-	    if ($res != null) {
-	      $entries[$ekey]["objectguid"][$i]=$res;
-            }
-          }
+    for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
+      if (in_array("objectguid", $entries[$eidx])) {
+        for($i = 0; $i < $entries[$eidx]["objectguid"]["count"]; $i++) {
+          $res = $this->GUIDtoStr($entries[$eidx]["objectguid"][$i]);
+          if ($res != null) {
+            $entries[$eidx]["objectguid"][$i]=$res;
+	  }
         }
-        $objectsid_binary = ldap_get_values_len($this->ldapconn, ldap_first_entry($this->ldapconn, $sr), "objectsid");
-        for ($i = 0; $i < $objectsid_binary["count"]; $i++) {
-          $entries[$ekey]["objectsid"][$i] = $this->bin_to_str_sid($objectsid_binary[$i]);
-        }
+      }
+      $objectsid_binary = ldap_get_values_len($this->ldapconn, ldap_first_entry($this->ldapconn, $sr), "objectsid");
+      for ($i = 0; $i < $objectsid_binary["count"]; $i++) {
+        $entries[$eidx]["objectsid"][$i] = $this->bin_to_str_sid($objectsid_binary[$i]);
       }
     }
 
     return $entries;
   }
+
+  function getGroupMembers($dn) {
+    $filter = "(memberOf=$dn)";
+    $members=array();
+    $sr = ldap_search($this->ldapconn, $this->ldapbaseDN, $filter, array("DN","objectclass"));
+    if (!$sr) return null;
+    $entries = ldap_get_entries($this->ldapconn, $sr);
+    for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
+      print $entries[$eidx]["dn"]."\n";
+      if (in_array("group", $entries[$eidx]["objectclass"])) {
+        $moremembers = $this->getGroupMembers($entries[$eidx]["dn"]);
+        if (is_array($moremembers)) {
+          $members = array_merge($members, $moremembers);
+	}
+      } else {
+        $members[] = $entries[$eidx]["dn"];
+      }
+    }
+    sort($members);
+    return array_unique($members);
+  }
 }
 
 $foo = new ldapinfo('adinfo.ini');
-$entries = $foo->getldapinfo("hansliss", array("objectguid","objectsid"));
-echo $entries[0]["objectguid"][0]."\n";
-echo $entries[0]["objectsid"][0]."\n";
-
+$ini_array = parse_ini_file('adinfo.ini', true);
+$testconf = $ini_array["test"];
+$entries = $foo->getUserInfo($testconf["user"], array("objectguid","objectsid","givenName","sn","mail"));
+print var_dump($entries);
+//echo $entries[0]["objectguid"][0]."\n";
+//echo $entries[0]["objectsid"][0]."\n";
+$m = $foo->getGroupMembers($testconf["group"]);
+print var_dump($m);
 ?>

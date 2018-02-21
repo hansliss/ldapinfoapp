@@ -3,3 +3,7 @@ url = ldaps://myserver.user.uu.se:636
 user = serviceuser@domain.local
 password = fruppleplam
 baseDN = "DC=user,DC=foobar,DC=com"
+
+[test]
+user = foobar
+group = CN=bletch, bla bla bla
