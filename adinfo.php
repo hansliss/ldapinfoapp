@@ -56,8 +56,6 @@ class ldapinfo {
     return $result;
   }
 
-  // ldapsearch -b OU=Groups,OU=UUBI,OU=LocalIT,DC=user,DC=uu,DC=se "(CN=uub-*)"  DN
-
   function getldapinfo($username, $fields) {
     $filter="(samAccountName=$username)";
     $sr=ldap_search($this->ldapconn, $this->ldapbaseDN, $filter, $fields);
