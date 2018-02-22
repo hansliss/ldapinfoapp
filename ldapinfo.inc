@@ -124,7 +124,8 @@ class ldapinfo {
       if (in_array("group", $entries[$eidx]["objectclass"])) {
         $moremembers = $this->getGroupMembers($entries[$eidx]["dn"]);
         if (is_array($moremembers)) {
-          $members = array_merge($members, $moremembers);
+	  $members[$entries[$eidx]["dn"]] = $moremembers;
+          // $members = array_merge($members, $moremembers);
 	}
       } else {
         $members[$entries[$eidx]["displayname"][0]] = $entries[$eidx]["dn"];
