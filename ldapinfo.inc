@@ -67,6 +67,27 @@ class ldapinfo {
     return $result;
   }
 
+  function parseGroupDN($dn) {
+    $res = null;
+    foreach ($this->ldapGroupDNParsers as $p) {
+      if (preg_match("/^".$p["groupRE"]."$/i", $dn, $matches)) {
+        $res = array();
+        if (is_numeric($p["groupTitle"])) {
+	  $res["title"] = $matches[$p["groupTitle"]];
+	} else {
+	  $res["title"] = $p["groupTitle"];
+	}
+        if (is_numeric($p["groupSection"])) {
+	  $res["section"] = $matches[$p["groupSection"]];
+	} else {
+	  $res["section"] = $p["groupSection"];
+	}
+        break;
+      }
+    }
+    return $res;
+  }
+  
   function getUserInfo($username, $fields) {
     $filter="(samAccountName=$username)";
     $sr=ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, $fields);
@@ -103,30 +124,21 @@ class ldapinfo {
       }
     }
     ksort($result);
+    $glist=array();
+    foreach ($result["memberof"] as $gdn) {
+      $g = array();
+      $g["dn"] = $gdn;
+      $r = $this->parseGroupDN($gdn);
+      if ($r != null) {
+        $g["title"] = $r["title"];
+        $g["section"] = $r["section"];
+      }
+      $glist[] = $g;
+    }
+    $result["groups"] = $glist;
     return $result;
   }
 
-  function parseGroupDN($dn) {
-    $res = null;
-    foreach ($this->ldapGroupDNParsers as $p) {
-      if (preg_match("/^".$p["groupRE"]."$/i", $dn, $matches)) {
-        $res = array();
-        if (is_numeric($p["groupTitle"])) {
-	  $res["title"] = $matches[$p["groupTitle"]];
-	} else {
-	  $res["title"] = $p["groupTitle"];
-	}
-        if (is_numeric($p["groupSection"])) {
-	  $res["section"] = $matches[$p["groupSection"]];
-	} else {
-	  $res["section"] = $p["groupSection"];
-	}
-        break;
-      }
-    }
-    return $res;
-  }
-  
   function getGroups() {
     $filter = "(&(objectclass=group)".$this->ldapGroupMask.")";
     $sr = ldap_search($this->ldapconn, $this->ldapGroupBaseDN, $filter, array("DN","CN"));
