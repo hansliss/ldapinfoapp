@@ -87,7 +87,7 @@ class ldapinfo {
     if (!$sr) return null;
     $entries = ldap_get_entries($this->ldapconn, $sr);
     for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
-      print $entries[$eidx]["dn"]."\n";
+      // print $entries[$eidx]["dn"]."\n";
       if (in_array("group", $entries[$eidx]["objectclass"])) {
         $moremembers = $this->getGroupMembers($entries[$eidx]["dn"]);
         if (is_array($moremembers)) {
@@ -105,10 +105,22 @@ class ldapinfo {
 $foo = new ldapinfo('adinfo.ini');
 $ini_array = parse_ini_file('adinfo.ini', true);
 $testconf = $ini_array["test"];
-$entries = $foo->getUserInfo($testconf["user"], array("objectguid","objectsid","givenName","sn","mail"));
-print var_dump($entries);
-//echo $entries[0]["objectguid"][0]."\n";
-//echo $entries[0]["objectsid"][0]."\n";
+$entries = $foo->getUserInfo($testconf["user"], array("objectguid","objectsid","givenName","sn","mail","telephoneNumber","mobile","otherTelephone","memberOf","title","description"));
+for ($i=0; $i < $entries[0]["count"]; $i++) {
+    $key = $entries[0][$i];
+    $val = $entries[0][$key];
+    print $key.": ";
+    if ($val["count"] > 1) {
+      print "\n";
+      for ($j=0; $j < $val["count"]; $j++) {
+        print "\t".$val[$j]."\n";
+      }
+    } else {
+      print $val[0]."\n";
+    }
+}
 $m = $foo->getGroupMembers($testconf["group"]);
-print var_dump($m);
+foreach ($m as $group) {
+  print $group."\n";
+}
 ?>
