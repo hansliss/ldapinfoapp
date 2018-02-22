@@ -116,7 +116,7 @@ class ldapinfo {
   function getGroupMembers($dn) {
     $filter = "(memberOf=$dn)";
     $members=array();
-    $sr = ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, array("DN","objectclass"));
+    $sr = ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, array("DN","objectclass","displayname"));
     if (!$sr) return null;
     $entries = ldap_get_entries($this->ldapconn, $sr);
     for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
@@ -127,11 +127,11 @@ class ldapinfo {
           $members = array_merge($members, $moremembers);
 	}
       } else {
-        $members[] = $entries[$eidx]["dn"];
+        $members[$entries[$eidx]["displayname"][0]] = $entries[$eidx]["dn"];
       }
     }
-    $members=array_unique($members);
-    sort($members);
+    //$members=array_unique($members);
+    ksort($members);
     return $members;
   }
 }
