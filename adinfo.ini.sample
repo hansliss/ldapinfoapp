@@ -3,7 +3,27 @@ url = ldaps://myserver.user.uu.se:636
 user = serviceuser@domain.local
 password = fruppleplam
 baseDN = "DC=user,DC=foobar,DC=com"
+groupBaseDN = "OU=Groups,OU=BAZ,OU=LocalIT,DC=user,DC=foobar,DC=com"
+groupMask = "(CN=bletch-*)"
+groupDNParser = foo,bar,SUNE,Generic
 
-[test]
-user = foobar
-group = CN=bletch, bla bla bla
+[foo]
+groupRE = "CN=([^,]*),OU=([^,]*),OU=Security,OU=Groups,OU=BAZ,OU=LocalIT,DC=user,DC=foobar,DC=com"
+groupTitle = 1
+groupSection = 2
+
+[bar]
+groupRE = "CN=([^,]*),OU=([^,]*),OU=Groups,OU=BAZ,OU=LocalIT,DC=user,DC=foobar,DC=com"
+groupTitle = 1
+groupSection = 2
+
+[SUNE]
+groupRE = "CN=([^,]*),OU=Groups,OU=Employee,OU=SUNE,DC=user,DC=foobar,DC=com"
+groupTitle = 1
+groupSection = "SUNE"
+
+[Generic]
+groupRE = "CN=([^,]*),(.*)"
+groupTitle = 1
+groupSection = 2
+
