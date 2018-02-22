@@ -23,7 +23,9 @@ class ldapinfo {
     $this->ldapGroupMask = $this->ldapConf["groupMask"];
     $plist = explode(",", $this->ldapConf["groupDNParser"]);
     foreach ($plist as $pname) {
-      $this->ldapGroupDNParsers[] = $ini_array[$pname];
+      $vals = $ini_array[$pname];
+      $vals["cat"] = $pname;
+      $this->ldapGroupDNParsers[] = $vals;
     }
     
     $this->ldapconn = ldap_connect($this->ldapHost) or die("Could not connect to $ldapHost");
@@ -72,6 +74,7 @@ class ldapinfo {
     foreach ($this->ldapGroupDNParsers as $p) {
       if (preg_match("/^".$p["groupRE"]."$/i", $dn, $matches)) {
         $res = array();
+	$res["cat"] = $p["cat"];
         if (is_numeric($p["groupTitle"])) {
 	  $res["title"] = $matches[$p["groupTitle"]];
 	} else {
@@ -86,6 +89,12 @@ class ldapinfo {
       }
     }
     return $res;
+  }
+
+  function cmpGrp($a, $b) {
+    $v1 = strcmp($a["cat"], $b["cat"]);
+    $v2 = strcmp($a["title"], $b["title"]);
+    return ($v1 > 0)?1:(($v1 < 0)?-1:$v2);
   }
   
   function getUserInfo($username, $fields) {
@@ -109,6 +118,7 @@ class ldapinfo {
       }
     }
     $result = array();
+    $result["dn"] = $entries[0]["dn"];
     for ($i=0; $i < $entries[0]["count"]; $i++) {
       $key = $entries[0][$i];
       $val = $entries[0][$key];
@@ -130,11 +140,13 @@ class ldapinfo {
       $g["dn"] = $gdn;
       $r = $this->parseGroupDN($gdn);
       if ($r != null) {
+        $g["cat"] = $r["cat"];
         $g["title"] = $r["title"];
         $g["section"] = $r["section"];
       }
       $glist[] = $g;
     }
+    usort($glist, array("ldapinfo", "cmpGrp"));
     $result["groups"] = $glist;
     return $result;
   }
@@ -154,6 +166,7 @@ class ldapinfo {
     foreach ($groups as $group) {
       $vals = $this->parseGroupDN($group["dn"]);
       if ($vals != null) {
+        $group["cat"]=$vals["cat"];
         $group["title"]=$vals["title"];
         $group["section"]=$vals["section"];
       }
@@ -177,6 +190,7 @@ class ldapinfo {
 	  $members[$entries[$eidx]["cn"][0]]["members"] = $moremembers;
 	  $r = $this->parseGroupDN($entries[$eidx]["dn"]);
 	  if ($r != null) {
+	    $members[$entries[$eidx]["cn"][0]]["cat"] = $r["cat"];
 	    $members[$entries[$eidx]["cn"][0]]["title"] = $r["title"];
 	    $members[$entries[$eidx]["cn"][0]]["section"] = $r["section"];
 	  }
