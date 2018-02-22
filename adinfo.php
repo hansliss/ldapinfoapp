@@ -9,6 +9,9 @@ header('Content-Type: application/json');
 $type = preg_replace('/[^a-z0-9_]+/i','',array_shift($request));
 $key = preg_replace('/[^a-z0-9_,=-]+/i','',array_shift($request));
 if ($type == 'user') {
+   if ($key == null) {
+     $key=str_replace("@user.uu.se", "", $_SERVER["REMOTE_USER"]);
+   }
    $attrs = $foo->getUserInfo($key, array("objectguid","objectsid","givenName","sn","mail","telephoneNumber","mobile","otherTelephone","memberOf","title","description"));
    print json_encode($attrs, JSON_PRETTY_PRINT);
 } else if ($type == "group") {
