@@ -2,7 +2,7 @@
 if (array_key_exists('username', $_REQUEST)) {
     $username = preg_replace('[^a-z0-9-_]', '', $_REQUEST['username']);
 } else {
-    $username = $_SERVER['REMOTE_USER'];
+    $username = preg_replace("@user.uu.se", "", $_SERVER['REMOTE_USER']);
 }
 ?>
 <html>
