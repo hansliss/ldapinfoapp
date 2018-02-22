@@ -101,7 +101,7 @@ class ldapinfo {
 
   function getGroups() {
     $filter = "(&(objectclass=group)".$this->ldapGroupMask.")";
-    $sr = ldap_search($this->ldapconn, $this->groupBaseDN, $filter, array("DN"));
+    $sr = ldap_search($this->ldapconn, $this->ldapGroupBaseDN, $filter, array("DN"));
     if (!$sr) return null;
     $entries = ldap_get_entries($this->ldapconn, $sr);
     $groups = array();
