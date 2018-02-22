@@ -76,8 +76,23 @@ class ldapinfo {
         $entries[$eidx]["objectsid"][$i] = $this->bin_to_str_sid($objectsid_binary[$i]);
       }
     }
-
-    return $entries;
+    $result = array();
+    for ($i=0; $i < $entries[0]["count"]; $i++) {
+      $key = $entries[0][$i];
+      $val = $entries[0][$key];
+      if ($val["count"] > 1) {
+        $thisval = array();
+        for ($j=0; $j < $val["count"]; $j++) {
+          $thisval[] = $val[$j];
+        }
+	sort($thisval);
+	$result[$key] = $thisval;
+      } else {
+        $result[$key] = $val[0];
+      }
+    }
+    ksort($result);
+    return $result;
   }
 
   function getGroupMembers($dn) {
@@ -105,19 +120,17 @@ class ldapinfo {
 $foo = new ldapinfo('adinfo.ini');
 $ini_array = parse_ini_file('adinfo.ini', true);
 $testconf = $ini_array["test"];
-$entries = $foo->getUserInfo($testconf["user"], array("objectguid","objectsid","givenName","sn","mail","telephoneNumber","mobile","otherTelephone","memberOf","title","description"));
-for ($i=0; $i < $entries[0]["count"]; $i++) {
-    $key = $entries[0][$i];
-    $val = $entries[0][$key];
-    print $key.": ";
-    if ($val["count"] > 1) {
-      print "\n";
-      for ($j=0; $j < $val["count"]; $j++) {
-        print "\t".$val[$j]."\n";
-      }
-    } else {
-      print $val[0]."\n";
+$attrs = $foo->getUserInfo($testconf["user"], array("objectguid","objectsid","givenName","sn","mail","telephoneNumber","mobile","otherTelephone","memberOf","title","description"));
+foreach ($attrs as $key => $val) {
+  print $key.": ";
+  if (is_array($val)) {
+    print "\n";
+    foreach($val as $v) {
+      print "\t".$v."\n";
     }
+  } else {
+    print $val."\n";
+  }
 }
 $m = $foo->getGroupMembers($testconf["group"]);
 foreach ($m as $group) {
