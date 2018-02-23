@@ -1,7 +1,7 @@
     function loadGroup(groupdn) {
         $.get("adinfo.php/group/" + groupdn, function(data, status){
-	    if (data == null) {
-		$("#groupinfo").html('<h3>Error contacting directory server</h3>');
+	    if (data.error) {
+		$("#groupinfo").html('<h3>Error</h3><p>' + data.error + '</p>');
 	    } else {
 		str = '<h2>' + data.name + '</h2>';
 		str += '<h3>GID: ' + data.gidnumber + '</h3>';
@@ -66,8 +66,8 @@ function makeList(mytree) {
 	};
 	var spinner = new Spinner(opts).spin(target);
         $.get("adinfo.php/groupmembers/" + groupdn, function(data, status){
-	    if (!$.trim(data)) {
-		$("#groupmembers").html('<h3>Error contacting directory server</h3>');
+	    if (data.error) {
+		$("#groupmembers").html('<h3>Error</h3><p>' + data.error + '</p>');
 	    } else {
 		$("#groupmembers").html(makeList(data));
 	    }

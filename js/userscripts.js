@@ -1,7 +1,7 @@
     function loadUser(username) {
         $.get("adinfo.php/user/" + username, function(data, status){
-	    if (data == null) {
-		$("#userinfo").html('<h3>Error contacting directory server</h3>');
+	    if (data.error) {
+		$("#userinfo").html('<h3>Error</h3><p>' + data.error + '</p>');
 	    } else {
 		str = '<h2>' + data.givenname + ' ' + data.sn + '</h2>';
 		str += '<h3>' + data.title + '</h3>';

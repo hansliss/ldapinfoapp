@@ -164,7 +164,7 @@ class ldapinfo {
     }
 
 
-function cleanUpLDAPEntries($entries, $sr) {
+    function cleanUpLDAPEntries($entries, $sr) {
         for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
             if (in_array("objectguid", $entries[$eidx])) {
                 for($i = 0; $i < $entries[$eidx]["objectguid"]["count"]; $i++) {
@@ -235,13 +235,10 @@ function cleanUpLDAPEntries($entries, $sr) {
     function getGroupInfo($dn, $fields) {
         $filter="(objectclass=group)";
         $sr=ldap_read($this->ldapconn, $dn, $filter, $fields);
-        if (!$sr) {			   
-            print "Error ".ldap_error($this->ldapconn).", base DN=".$dn.", filter=".$filter."\n";
+        if (!$sr) {
             ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
-            print "Detailed error: '".$err."'\n";	       
-            
-            return null;
-	      }
+            return array("error", ldap_error($this->ldapconn).":".$err);
+        }
         $entries = ldap_get_entries($this->ldapconn, $sr);
         return $this->cleanUpLDAPEntries($entries, $sr);
     }
@@ -253,7 +250,10 @@ function cleanUpLDAPEntries($entries, $sr) {
         $filter = "(&(objectclass=person)(displayname=*".$searchterm."*))";
         $baseDN = $this->ldapUserBaseDN;
         $sr = ldap_search($this->ldapconn, $baseDN, $filter, array("DN","displayName","sn","givenName","samaccountname","title","department"));
-        if (!$sr) return null;
+        if (!$sr) {
+            ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
+            return array("error", ldap_error($this->ldapconn).":".$err);
+        }
         $entries = ldap_get_entries($this->ldapconn, $sr);
         $users = array();
         for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
@@ -282,7 +282,10 @@ function cleanUpLDAPEntries($entries, $sr) {
             $baseDN = $this->ldapBaseDN;
         }
         $sr = ldap_search($this->ldapconn, $baseDN, $filter, array("DN","CN"));
-        if (!$sr) return null;
+        if (!$sr) {
+            ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
+            return array("error", ldap_error($this->ldapconn).":".$err);
+        }
         $entries = ldap_get_entries($this->ldapconn, $sr);
         $groups = array();
         for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
@@ -312,13 +315,10 @@ function cleanUpLDAPEntries($entries, $sr) {
         $filter = "(memberOf=$dn)";
         $members=array();
         $sr = ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, array("DN","objectclass","displayname","samAccountName","cn","sn","givenname"), 0, 0, 0, LDAP_DEREF_NEVER);
-        if (!$sr) {			   
-/*            print "Error ".ldap_error($this->ldapconn).", base DN=".$this->ldapBaseDN.", filter=".$filter."\n";
-              ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
-              print "Detailed error: '".$err."'\n";
-*/
-            return null;
-	      }
+        if (!$sr) {
+            ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
+            return array("error", ldap_error($this->ldapconn).":".$err);
+        }
         $entries = ldap_get_entries($this->ldapconn, $sr);
         for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
             // print $entries[$eidx]["dn"]."\n";
