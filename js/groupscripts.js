@@ -70,6 +70,12 @@ function makeList(mytree) {
 		$("#groupmembers").html('<h3>Error</h3><p>' + data.error + '</p>');
 	    } else {
 		$("#groupmembers").html(makeList(data));
+		$("#groupmembers").jstree();
+		$("#groupmembers").on('changed.jstree', function (e, data) {
+		    if (data.node.a_attr.href) {
+			window.location=data.node.a_attr.href;
+		    }
+		});
 	    }
 	    spinner.stop();
         }).fail(function() {

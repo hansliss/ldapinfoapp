@@ -1,10 +1,12 @@
 <html>
 <head>
 <title>LDAP browser - Group</title>
+<link rel="stylesheet" href="jstree/themes/default/style.min.css" />
 <link rel="stylesheet" href="css/styles.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/groupscripts.js"></script>
 <script src="js/spin.js"></script>
+<script src="jstree/jstree.js"></script>
 <script>
 $(document).ready(function(){
     loadGroup("<?php print preg_replace('[\'"<>]', '', $_REQUEST['dn']); ?>");
