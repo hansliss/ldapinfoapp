@@ -26,5 +26,5 @@ if ($type == 'user') {
 } else if ($type == "groupsearch") {
     $m = $foo->getGroups($key);
 }
-if ($m) print json_encode($m, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
+if ($m !== null) print json_encode($m, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
 ?>
