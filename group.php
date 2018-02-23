@@ -14,8 +14,8 @@ $(document).ready(function(){
 </head>
 <body>
 <h1>Group info</h1>
-<div id="groupinfo"/>
+<div id="groupinfo"></div>
 <h2 id="spinhere">Members</h2>
-<div id="groupmembers"/>
+<div id="groupmembers"></div>
 </body>
 </html>

@@ -1,17 +1,18 @@
     function loadGroup(groupdn) {
         $.get("adinfo.php/group/" + groupdn, function(data, status){
-            $("#groupinfo").append('<h2>' + data.name + '</h2>');
-            $("#groupinfo").append('<h3>GID: ' + data.gidnumber + '</h3>');
-            str='<h3>Groups</h3><div class="groups"><ul>';
+            str = '<h2>' + data.name + '</h2>';
+            str += '<h3>GID: ' + data.gidnumber + '</h3>';
+            str += '<h3>Groups</h3><div class="groups"><ul>';
             data.groups.forEach(function(item, index) {
                 str += '<li><a href="group.php?dn=' + encodeURIComponent(item.dn) + '">' + item.title + ' (' + item.section + ')</a></li>';
             });
-            $("#groupinfo").append(str + '</ul></div>');
-            str = '<h3>Technical stuff</h3><table class="tech">';
+            str += '</ul></div>';
+            str += '<h3>Technical stuff</h3><table class="tech">';
             str += '<th>DN</th><td>' + data.dn + '</td></tr>';
             str += '<tr><th>SID</th><td>' + data.objectsid + '</td></tr>';
             str += '<th>GUID</th><td>' + data.objectguid + '</td></tr>';
-            $("#groupinfo").append(str + '</table>');
+	    str += '</table>';
+            $("#groupinfo").html(str);
         });
     }
 
@@ -59,7 +60,7 @@ function makeList(mytree) {
 	};
 	var spinner = new Spinner(opts).spin(target);
         $.get("adinfo.php/groupmembers/" + groupdn, function(data, status){
-	    $("#groupmembers").append(makeList(data));
+	    $("#groupmembers").html(makeList(data));
 	    spinner.stop();
         });
     }
