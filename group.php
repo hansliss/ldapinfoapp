@@ -14,6 +14,7 @@ $(document).ready(function(){
 </head>
 <body>
 <h1>Group info</h1>
+<p><a href="index.php">Back to start</a></p>
 <div id="groupinfo"></div>
 <h2 id="spinhere">Members</h2>
 <div id="groupmembers"></div>

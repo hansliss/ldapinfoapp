@@ -19,6 +19,7 @@ $(document).ready(function(){
 </head>
 <body>
 <h1>User info</h1>
+<p><a href="index.php">Back to start</a></p>
 <div id="userinfo"/>
 </body>
 </html>
