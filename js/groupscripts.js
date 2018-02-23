@@ -1,18 +1,24 @@
     function loadGroup(groupdn) {
         $.get("adinfo.php/group/" + groupdn, function(data, status){
-            str = '<h2>' + data.name + '</h2>';
-            str += '<h3>GID: ' + data.gidnumber + '</h3>';
-            str += '<h3>Groups</h3><div class="groups"><ul>';
-            data.groups.forEach(function(item, index) {
-                str += '<li><a href="group.php?dn=' + encodeURIComponent(item.dn) + '">' + item.title + ' (' + item.section + ')</a></li>';
-            });
-            str += '</ul></div>';
-            str += '<h3>Technical stuff</h3><table class="tech">';
-            str += '<th>DN</th><td>' + data.dn + '</td></tr>';
-            str += '<tr><th>SID</th><td>' + data.objectsid + '</td></tr>';
-            str += '<th>GUID</th><td>' + data.objectguid + '</td></tr>';
-	    str += '</table>';
-            $("#groupinfo").html(str);
+	    if (data == null) {
+		$("#groupinfo").html('<h3>Error contacting directory server</h3>');
+	    } else {
+		str = '<h2>' + data.name + '</h2>';
+		str += '<h3>GID: ' + data.gidnumber + '</h3>';
+		str += '<h3>Groups</h3><div class="groups"><ul>';
+		data.groups.forEach(function(item, index) {
+                    str += '<li><a href="group.php?dn=' + encodeURIComponent(item.dn) + '">' + item.title + ' (' + item.section + ')</a></li>';
+		});
+		str += '</ul></div>';
+		str += '<h3>Technical stuff</h3><table class="tech">';
+		str += '<th>DN</th><td>' + data.dn + '</td></tr>';
+		str += '<tr><th>SID</th><td>' + data.objectsid + '</td></tr>';
+		str += '<th>GUID</th><td>' + data.objectguid + '</td></tr>';
+		str += '</table>';
+		$("#groupinfo").html(str);
+	    }
+        }).fail(function() {
+	    $("#groupinfo").html('<h3>Error contacting directory server</h3>');
         });
     }
 
@@ -60,8 +66,15 @@ function makeList(mytree) {
 	};
 	var spinner = new Spinner(opts).spin(target);
         $.get("adinfo.php/groupmembers/" + groupdn, function(data, status){
-	    $("#groupmembers").html(makeList(data));
+	    if (!$.trim(data)) {
+		$("#groupmembers").html('<h3>Error contacting directory server</h3>');
+	    } else {
+		$("#groupmembers").html(makeList(data));
+	    }
 	    spinner.stop();
-        });
+        }).fail(function() {
+	    $("#groupmembers").html('<h3>Error contacting directory server</h3><p>DN=' + groupdn + '</p>');
+	    spinner.stop();
+	});
     }
 

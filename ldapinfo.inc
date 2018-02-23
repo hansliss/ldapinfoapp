@@ -37,6 +37,7 @@ class ldapinfo {
     
         $this->ldapconn = ldap_connect($this->ldapHost) or die("Could not connect to $ldapHost");
         ldap_set_option($this->ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
+        ldap_set_option ($this->ldapconn, LDAP_OPT_REFERRALS, 0) or die('Unable to set LDAP opt referrals');
         ldap_bind($this->ldapconn, $this->ldapUser, $this->ldapPwd) or die("Could not bind\n");
     }
 
@@ -195,7 +196,7 @@ class ldapinfo {
     function getUserInfo($username, $fields) {
         $filter="(samAccountName=".$username.")";
         $sr=ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, $fields);
-        if (!$sr) die("Search failed\n");
+        if (!$sr) return null;
         $entries = ldap_get_entries($this->ldapconn, $sr);
 
         return $this->cleanUpLDAPEntries($entries, $sr);
@@ -208,6 +209,7 @@ class ldapinfo {
     function getGroupInfo($dn, $fields) {
         $filter="(objectclass=group)";
         $sr=ldap_read($this->ldapconn, $dn, $filter, $fields);
+	if (!$sr) return null;
         $entries = ldap_get_entries($this->ldapconn, $sr);
         return $this->cleanUpLDAPEntries($entries, $sr);
     }
@@ -277,8 +279,15 @@ class ldapinfo {
     function getGroupMembers($dn) {
         $filter = "(memberOf=$dn)";
         $members=array();
-        $sr = ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, array("DN","objectclass","displayname","samAccountName","cn"));
-        if (!$sr) return null;
+	print $filter."\n";
+    $sr = ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, array("DN","objectclass","displayname","samAccountName","cn"), 0, 0, 0, LDAP_DEREF_NEVER);
+        if (!$sr) {			   
+/*            print "Error ".ldap_error($this->ldapconn).", base DN=".$this->ldapBaseDN.", filter=".$filter."\n";
+            ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
+            print "Detailed error: '".$err."'\n";
+*/
+            return null;
+	      }
         $entries = ldap_get_entries($this->ldapconn, $sr);
         for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
             // print $entries[$eidx]["dn"]."\n";

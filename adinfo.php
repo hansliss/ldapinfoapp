@@ -8,6 +8,7 @@ $input = json_decode(file_get_contents('php://input'),true);
 header('Content-Type: application/json');
 $type = preg_replace('/[^a-z0-9_]/i','',array_shift($request));
 $key = array_shift($request);
+$m = null;
 if ($type == 'user') {
     if ($key == null) {
         $key=str_replace("@user.uu.se", "", $_SERVER["REMOTE_USER"]);
@@ -16,18 +17,14 @@ if ($type == 'user') {
     print json_encode($attrs, JSON_PRETTY_PRINT);
 } else if ($type == "group") {
     $m = $foo->getGroupInfo($key, array("objectguid","objectsid","cn","memberof","name","gidnumber"));
-    print json_encode($m, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
 } else if ($type == "groupmembers") {
     $m = $foo->getGroupMembers($key);
-    print json_encode($m, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
 } else if ($type == "groups") {
     $m = $foo->getGroups();
-    print json_encode($m, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
 } else if ($type == "usersearch") {
     $m = $foo->getUsers($key);
-    print json_encode($m, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
 } else if ($type == "groupsearch") {
     $m = $foo->getGroups($key);
-    print json_encode($m, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
 }
+if ($m) print json_encode($m, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
 ?>
