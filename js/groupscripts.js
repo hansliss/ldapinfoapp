@@ -5,7 +5,7 @@
 	    } else {
 		str = '<h2>' + data.name + '</h2>';
 		str += '<h3>GID: ' + data.gidnumber + '</h3>';
-		str += '<h3>Groups</h3><div class="groups"><ul>';
+		str += '<h3>Is a member of these groups</h3><div class="groups"><ul>';
 		data.groups.forEach(function(item, index) {
                     str += '<li><a href="group.php?dn=' + encodeURIComponent(item.dn) + '">' + item.title + ' (' + item.section + ')</a></li>';
 		});

@@ -15,7 +15,7 @@
 		if (data.othertelephone != null) {
                     str += '<p>Other phone: <a href="tel:' + data.othertelephone + '">' + data.othertelephone + '</a></p>';
 		}
-		str += '<h3>Groups</h3><div class="groups"><ul>';
+		str += '<h3>Is a member of these groups</h3><div class="groups"><ul>';
 		data.groups.forEach(function(item, index) {
                     str += '<li><a href="group.php?dn=' + encodeURIComponent(item.dn) + '">' + item.title + ' (' + item.section + ')</a></li>';
 		});
