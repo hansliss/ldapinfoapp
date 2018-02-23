@@ -184,7 +184,7 @@ function cleanUpLDAPEntries($entries, $sr) {
         for ($i=0; $i < $entries[0]["count"]; $i++) {
             $key = $entries[0][$i];
             $val = $entries[0][$key];
-            if ($val["count"] > 1) {
+            if ($val["count"] > 1 || $key == "memberof") {
                 $thisval = array();
                 for ($j=0; $j < $val["count"]; $j++) {
                     $thisval[] = $val[$j];
@@ -235,7 +235,13 @@ function cleanUpLDAPEntries($entries, $sr) {
     function getGroupInfo($dn, $fields) {
         $filter="(objectclass=group)";
         $sr=ldap_read($this->ldapconn, $dn, $filter, $fields);
-	if (!$sr) return null;
+        if (!$sr) {			   
+            print "Error ".ldap_error($this->ldapconn).", base DN=".$dn.", filter=".$filter."\n";
+            ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
+            print "Detailed error: '".$err."'\n";	       
+            
+            return null;
+	      }
         $entries = ldap_get_entries($this->ldapconn, $sr);
         return $this->cleanUpLDAPEntries($entries, $sr);
     }
