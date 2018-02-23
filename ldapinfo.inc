@@ -193,7 +193,7 @@ class ldapinfo {
      * a secondary value "groups".
      */
     function getUserInfo($username, $fields) {
-        $filter="(samAccountName=".ldap_escape($username).")";
+        $filter="(samAccountName=".$username.")";
         $sr=ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, $fields);
         if (!$sr) die("Search failed\n");
         $entries = ldap_get_entries($this->ldapconn, $sr);
@@ -216,7 +216,7 @@ class ldapinfo {
      * Get a list of users, by searching for a key.
      */
     function getUsers($searchterm) {
-        $filter = "(&(objectclass=person)(displayname=*".ldap_escape($searchterm)."*))";
+        $filter = "(&(objectclass=person)(displayname=*".$searchterm."*))";
         $baseDN = $this->ldapUserBaseDN;
         $sr = ldap_search($this->ldapconn, $baseDN, $filter, array("DN","displayName","sn","givenName","samaccountname","title","department"));
         if (!$sr) return null;
