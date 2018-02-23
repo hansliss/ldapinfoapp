@@ -12,6 +12,7 @@ class ldapinfo {
     private $ldapUser;
     private $ldapPwd;
     private $ldapBaseDN;
+    private $ldapUserBaseDN;
     private $ldapGroupBaseDN;
     private $ldapGroupMask;
     private $ldapconn;
@@ -24,6 +25,7 @@ class ldapinfo {
         $this->ldapUser = $this->ldapConf["user"];
         $this->ldapPwd = $this->ldapConf["password"];
         $this->ldapBaseDN = $this->ldapConf["baseDN"];
+        $this->ldapUserBaseDN = $this->ldapConf["userBaseDN"];
         $this->ldapGroupBaseDN = $this->ldapConf["groupBaseDN"];
         $this->ldapGroupMask = $this->ldapConf["groupMask"];
         $plist = explode(",", $this->ldapConf["groupDNParser"]);
@@ -113,12 +115,25 @@ class ldapinfo {
 
     /*
      * Compare two group entries, for sorting.
-     * Primary criterion is the categori, from the parser.
-     * Secondary criterion is the title.
+     * Primary criterion is the category, from the parser.
+     * Secondary criterion is the section.
+     * Tertiary criterion is the title.
      */
     function cmpGrp($a, $b) {
         $v1 = strcmp($a["cat"], $b["cat"]);
-        $v2 = strcmp($a["title"], $b["title"]);
+        $v2 = strcmp($a["section"], $b["section"]);
+        $v3 = strcmp($a["title"], $b["title"]);
+        return ($v1 > 0)?1:(($v1 < 0)?-1:(($v2>0)?1:(($v2<0)?-1:$v3)));
+    }
+
+    /*
+     * Compare two person entries, for sorting.
+     * Primary criterion is the last name, "sn".
+     * Secondary criterion is the given name.
+     */
+    function cmpUser($a, $b) {
+        $v1 = strcmp($a["sn"], $b["sn"]);
+        $v2 = strcmp($a["givenname"], $b["givenname"]);
         return ($v1 > 0)?1:(($v1 < 0)?-1:$v2);
     }
 
@@ -184,13 +199,41 @@ class ldapinfo {
     }
 
     /*
+     * Get a list of users, by searching for a key.
+     */
+    function getUsers($searchterm) {
+        $filter = "(&(objectclass=person)(displayname=*$searchterm*))";
+        $baseDN = $this->ldapUserBaseDN;
+        $sr = ldap_search($this->ldapconn, $baseDN, $filter, array("DN","displayName","sn","givenName","samaccountname","title","department"));
+        if (!$sr) return null;
+        $entries = ldap_get_entries($this->ldapconn, $sr);
+        $users = array();
+        for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
+            $u["dn"] = $entries[$eidx]["dn"];
+            $u["displayname"] = $entries[$eidx]["displayname"][0];
+            $u["givenname"] = $entries[$eidx]["sn"][0];
+            $u["sn"] = $entries[$eidx]["sn"][0];
+            $u["uid"] = $entries[$eidx]["samaccountname"][0];
+            $u["title"] = $entries[$eidx]["title"][0];
+            $u["department"] = $entries[$eidx]["department"][0];
+            $users[] = $u;
+        }
+        usort($users, array("ldapinfo", "cmpUser"));
+        return $users;
+    }
+
+    /*
      * Get a list of groups using a given Base DN and filter.
      * Parse the group info according to a list of rules.
-     * TODO: Sort, just like for groups on a user.
      */
-    function getGroups() {
+    function getGroups($searchterm = null) {
         $filter = "(&(objectclass=group)".$this->ldapGroupMask.")";
-        $sr = ldap_search($this->ldapconn, $this->ldapGroupBaseDN, $filter, array("DN","CN"));
+        $baseDN = $this->ldapGroupBaseDN;
+        if ($searchterm) {
+            $filter = "(&(objectclass=group)(cn=*$searchterm*))";
+            $baseDN = $this->ldapBaseDN;
+        }
+        $sr = ldap_search($this->ldapconn, $baseDN, $filter, array("DN","CN"));
         if (!$sr) return null;
         $entries = ldap_get_entries($this->ldapconn, $sr);
         $groups = array();
@@ -209,6 +252,7 @@ class ldapinfo {
             }
             $r[] = $group;
         }
+        usort($r, array("ldapinfo", "cmpGrp"));
         return $r;
     }
 
