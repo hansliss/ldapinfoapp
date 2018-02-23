@@ -137,19 +137,7 @@ class ldapinfo {
         return ($v1 > 0)?1:(($v1 < 0)?-1:$v2);
     }
 
-    /*
-     * Get info about a user, including group membership.
-     * We use a provided list of fields to select what to
-     * extract, and replace the complex LDAP entry with a simpler
-     * dictionary (array). Group info is parsed and sorted into
-     * a secondary value "groups".
-     */
-    function getUserInfo($username, $fields) {
-        $filter="(samAccountName=$username)";
-        $sr=ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, $fields);
-        if (!$sr) die("Search failed\n");
-        $entries = ldap_get_entries($this->ldapconn, $sr);
-
+    function cleanUpLDAPEntries($entries, $sr) {
         for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
             if (in_array("objectguid", $entries[$eidx])) {
                 for($i = 0; $i < $entries[$eidx]["objectguid"]["count"]; $i++) {
@@ -197,12 +185,38 @@ class ldapinfo {
         $result["groups"] = $glist;
         return $result;
     }
+    /*
+     * Get info about a user, including group membership.
+     * We use a provided list of fields to select what to
+     * extract, and replace the complex LDAP entry with a simpler
+     * dictionary (array). Group info is parsed and sorted into
+     * a secondary value "groups".
+     */
+    function getUserInfo($username, $fields) {
+        $filter="(samAccountName=".ldap_escape($username).")";
+        $sr=ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, $fields);
+        if (!$sr) die("Search failed\n");
+        $entries = ldap_get_entries($this->ldapconn, $sr);
+
+        return $this->cleanUpLDAPEntries($entries, $sr);
+    }
+
+    /*
+     * Get information about a specific group, including basic info, and which groups
+     * of which it is a member.
+     */
+    function getGroupInfo($dn, $fields) {
+        $filter="(objectclass=group)";
+        $sr=ldap_read($this->ldapconn, $dn, $filter, $fields);
+        $entries = ldap_get_entries($this->ldapconn, $sr);
+        return $this->cleanUpLDAPEntries($entries, $sr);
+    }
 
     /*
      * Get a list of users, by searching for a key.
      */
     function getUsers($searchterm) {
-        $filter = "(&(objectclass=person)(displayname=*$searchterm*))";
+        $filter = "(&(objectclass=person)(displayname=*".ldap_escape($searchterm)."*))";
         $baseDN = $this->ldapUserBaseDN;
         $sr = ldap_search($this->ldapconn, $baseDN, $filter, array("DN","displayName","sn","givenName","samaccountname","title","department"));
         if (!$sr) return null;

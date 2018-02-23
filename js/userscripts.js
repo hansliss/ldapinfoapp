@@ -12,12 +12,12 @@
             if (data.othertelephone != null) {
                 $("#userinfo").append('<p>Other phone: <a href="tel:' + data.othertelephone + '">' + data.othertelephone + '</a></p>');
             }
-            str='<div class="groups"><ul>';
+            str='<h3>Groups</h3><div class="groups"><ul>';
             data.groups.forEach(function(item, index) {
                 str += '<li><a href="group.php?dn=' + encodeURIComponent(item.dn) + '">' + item.title + ' (' + item.section + ')</a></li>';
             });
             $("#userinfo").append(str + '</ul></div>');
-            str = '<table class="tech">';
+            str = '<h3>Technical stuff</h3><table class="tech">';
             str += '<th>DN</th><td>' + data.dn + '</td></tr>';
             str += '<tr><th>SID</th><td>' + data.objectsid + '</td></tr>';
             str += '<th>GUID</th><td>' + data.objectguid + '</td></tr>';

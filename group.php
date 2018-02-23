@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>LDAP browser - Group</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/groupscripts.js"></script>
+<script src="js/spin.js"></script>
+<script>
+$(document).ready(function(){
+    loadGroup("<?php print preg_replace('[\'"<>]', '', $_REQUEST['dn']); ?>");
+    loadGroupMembers("<?php print preg_replace('[\'"<>]', '', $_REQUEST['dn']); ?>");
+});
+</script>
+</head>
+<body>
+<h1>Group info</h1>
+<div id="groupinfo"/>
+<h2 id="spinhere">Members</h2>
+<div id="groupmembers"/>
+</body>
+</html>
