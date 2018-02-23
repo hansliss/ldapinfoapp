@@ -138,7 +138,33 @@ class ldapinfo {
         return ($v1 > 0)?1:(($v1 < 0)?-1:$v2);
     }
 
-    function cleanUpLDAPEntries($entries, $sr) {
+    /*
+     * Compare two group entries, for sorting.
+     * Primary criterion is the category, from the parser.
+     * Secondary criterion is the section.
+     * Tertiary criterion is the title.
+     */
+    function cmpGrpMemb($a, $b) {
+        if (array_key_exists("title", $a)) {
+            if (array_key_exists("givenname", $b)) {
+                return -1;
+            }
+            $v1 = strcmp($a["cat"], $b["cat"]);
+            $v2 = strcmp($a["section"], $b["section"]);
+            $v3 = strcmp($a["title"], $b["title"]);
+            return ($v1 > 0)?1:(($v1 < 0)?-1:(($v2>0)?1:(($v2<0)?-1:$v3)));
+        } else {
+            if (array_key_exists("title", $b)) {
+                return 1;
+            }
+	        $v1 = strcmp($a["sn"], $b["sn"]);
+            $v2 = strcmp($a["givenname"], $b["givenname"]);
+            return ($v1 > 0)?1:(($v1 < 0)?-1:$v2);
+        }
+    }
+
+
+function cleanUpLDAPEntries($entries, $sr) {
         for ($eidx = 0; $eidx < $entries["count"]; $eidx++) {
             if (in_array("objectguid", $entries[$eidx])) {
                 for($i = 0; $i < $entries[$eidx]["objectguid"]["count"]; $i++) {
@@ -279,12 +305,11 @@ class ldapinfo {
     function getGroupMembers($dn) {
         $filter = "(memberOf=$dn)";
         $members=array();
-	print $filter."\n";
-    $sr = ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, array("DN","objectclass","displayname","samAccountName","cn"), 0, 0, 0, LDAP_DEREF_NEVER);
+        $sr = ldap_search($this->ldapconn, $this->ldapBaseDN, $filter, array("DN","objectclass","displayname","samAccountName","cn","sn","givenname"), 0, 0, 0, LDAP_DEREF_NEVER);
         if (!$sr) {			   
 /*            print "Error ".ldap_error($this->ldapconn).", base DN=".$this->ldapBaseDN.", filter=".$filter."\n";
-            ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
-            print "Detailed error: '".$err."'\n";
+              ldap_get_option($this->ldapconn, LDAP_OPT_DIAGNOSTIC_MESSAGE, $err);
+              print "Detailed error: '".$err."'\n";
 */
             return null;
 	      }
@@ -306,10 +331,12 @@ class ldapinfo {
             } else {
                 $members[$entries[$eidx]["samaccountname"][0]]["dn"] = $entries[$eidx]["dn"];
                 $members[$entries[$eidx]["samaccountname"][0]]["displayname"] = $entries[$eidx]["displayname"][0];
+                $members[$entries[$eidx]["samaccountname"][0]]["sn"] = $entries[$eidx]["sn"][0];
+                $members[$entries[$eidx]["samaccountname"][0]]["givenname"] = $entries[$eidx]["givenname"][0];
             }
         }
         //$members=array_unique($members);
-        ksort($members);
+        uasort($members, array("ldapinfo", "cmpGrpMemb"));
         return $members;
     }
 }
