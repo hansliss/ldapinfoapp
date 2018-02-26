@@ -26,11 +26,12 @@ function makeList(mytree) {
     s = '<ul>';
     for (var id in mytree) {
 	if (mytree.hasOwnProperty(id)) {
-	    s += '<li>';
 	    if (mytree[id].title) {
+                s += '<li>';
 		s += '<a href="group.php?dn=' + encodeURIComponent(mytree[id].dn) + '">' + mytree[id].title + '</a>';
 		s += makeList(mytree[id].members);
 	    } else {
+		s += '<li data-jstree=\'{"icon":"user.png"}\'>';
 		s += '<a href="user.php?username=' + encodeURIComponent(id) + '">' + mytree[id].displayname + '</a>';
 	    }
 	    s += '</li>';
