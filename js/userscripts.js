@@ -4,6 +4,7 @@
 		$("#userinfo").html('<h3>Error</h3><p>' + data.error + '</p>');
 	    } else {
 		str = '<h2>' + data.givenname + ' ' + data.sn + '</h2>';
+		str += '<p><em>' + data.username + '</em></p>';
 		str += '<h3>' + data.title + '</h3>';
 		str += '<p>Mail: <a href="mailto:' + data.mail + '">' + data.mail + '</a></p>';
 		if (data.telephonenumber != null) {
