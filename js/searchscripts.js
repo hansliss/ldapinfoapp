@@ -40,7 +40,7 @@ function doSearch(type, box, field) {
 	var dlen = data.length;
 	for (var i = 0; i < dlen; i++) {
 	    if (type == 'group') {
-		str += '<tr><td class="title"><a href="group.php?groupDN=' + encodeURIComponent(data[i].dn) + '">' + data[i].title + '</a></td><td class="section">' + data[i].section + '</td></tr>';
+		str += '<tr><td class="title"><a href="group.php?dn=' + encodeURIComponent(data[i].dn) + '">' + data[i].title + '</a></td><td class="section">' + data[i].section + '</td></tr>';
 	    } else if (type == 'user') {
 		str += '<tr><td class="title"><a href="user.php?username=' + encodeURIComponent(data[i].uid) + '">' + data[i].displayname + '</a></td><td class="section">' + ((data[i].title==null)?'':data[i].title) + ((data[i].department==null)?'':(', ' + data[i].department)) + '</td></tr>';
 	    }
