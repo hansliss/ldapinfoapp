@@ -32,7 +32,7 @@ function makeList(mytree) {
 		s += makeList(mytree[id].members);
 	    } else {
 		s += '<li data-jstree=\'{"icon":"user.png"}\'>';
-		s += '<a href="user.php?username=' + encodeURIComponent(id) + '">' + mytree[id].displayname + '</a>';
+		s += '<a href="user.php?username=' + encodeURIComponent(id) + '">' + mytree[id].displayname + ' (' + id + ')</a>';
 	    }
 	    s += '</li>';
 	}
