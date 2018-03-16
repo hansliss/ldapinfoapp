@@ -264,6 +264,7 @@ class ldapinfo {
             $u["uid"] = $entries[$eidx]["samaccountname"][0];
             $u["title"] = $entries[$eidx]["title"][0];
             $u["department"] = $entries[$eidx]["department"][0];
+            $u["wwwhomepage"] = $entries[$eidx]["wwwhomepage"][0];
             $users[] = $u;
         }
         usort($users, array("ldapinfo", "cmpUser"));

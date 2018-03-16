@@ -13,7 +13,7 @@ if ($type == 'user') {
     if ($key == null) {
         $key=str_replace("@user.uu.se", "", $_SERVER["REMOTE_USER"]);
     }
-    $attrs = $foo->getUserInfo($key, array("objectguid","objectsid","givenName","sn","mail","telephoneNumber","mobile","otherTelephone","memberOf","title","description"));
+    $attrs = $foo->getUserInfo($key, array("objectguid","objectsid","givenName","sn","mail","telephoneNumber","mobile","otherTelephone","memberOf","title","description","wwwhomepage"));
     print json_encode($attrs, JSON_PRETTY_PRINT);
 } else if ($type == "group") {
     $m = $foo->getGroupInfo($key, array("objectguid","objectsid","cn","memberof","name","gidnumber"));

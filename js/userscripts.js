@@ -5,8 +5,15 @@
 	    } else {
 		str = '<h2>' + data.givenname + ' ' + data.sn + '</h2>';
 		str += '<p><em>' + username + '</em></p>';
-		str += '<h3>' + data.title + '</h3>';
-		str += '<p>Mail: <a href="mailto:' + data.mail + '">' + data.mail + '</a></p>';
+		if (data.wwwhomepage) {
+		    str += '<p><a href="' + data.wwwhomepage + '">Directory entry: ' + data.wwwhomepage + '</a></p>';
+		}
+		if (data.title != null) {
+		    str += '<h3>' + data.title + '</h3>';
+		}
+		if (data.mail != null) {
+		    str += '<p>Mail: <a href="mailto:' + data.mail + '">' + data.mail + '</a></p>';
+		}
 		if (data.telephonenumber != null) {
                     str += '<p>Phone: <a href="tel:' + data.telephonenumber + '">' + data.telephonenumber + '</a></p>';
 		}
