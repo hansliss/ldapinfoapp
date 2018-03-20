@@ -12,7 +12,7 @@ class header {
     }
     
     public function emit() {
-        $title = "LDAP Browser";
+        $title = "Active Directory LDAP Browser";
         if ($this->subtitle) {
             $title .= " - " . $this->subtitle;
 		}		  
