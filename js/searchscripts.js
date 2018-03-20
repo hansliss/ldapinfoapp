@@ -6,10 +6,15 @@ function doDelayedSearch(type, box, field) {
     }
     timeout = setTimeout(function() {
 	doSearch(type, box, field);
-    }, 1500);
+    }, 1000);
 }
 
 function doSearch(type, box, field) {
+    if (field.value.length <= 2) {
+        mylist = $("#" + box);
+        mylist.css('display', 'none');
+        return;
+    }
     var target = document.getElementById('spinhere');
     var opts = {
 	lines: 13, // The number of lines to draw

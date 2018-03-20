@@ -10,9 +10,15 @@ clearfix:after {
 }
 
 .top-container {
-    height: 142px;
+    /* height: 142px;*/
     background: #f2f2f2;
 }
+
+.top-stripe {
+    height: 15px;
+    background: #be2435;
+}
+
 
 .top-content {
     height: 125px;
@@ -32,22 +38,35 @@ clearfix:after {
     width: 90px;
 }
 
+table td {
+    vertical-align: top;
+}
+
 .top-content #title {
     position: absolute;
-    top: 50px;
-    left: 120px;
+    top: 45px;
+    left: 130px;
 }
 
 body #contents {
     width: 960px;
     background: #fffefd;
     border: 1px solid #DDD;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
     padding-left: 35px;
     padding-bottom: 35px;
 }
 
 a {
     text-decoration: none;
+}
+
+p.instructions {
+    font-size: small;
+    font-style: italic;
 }
 
 .backlink {
@@ -93,7 +112,7 @@ div#groupbox, div#userbox {
     position: relative;
     left: 0;
     width: auto;
-    height: 480px;
+    height: auto;
     border: 1px solid #444444;
     overflow-y: auto;
     table-layout: fixed;
