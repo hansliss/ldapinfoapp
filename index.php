@@ -1,20 +1,18 @@
-<html>
-  <head>
-    <title>LDAP Browser</title>
-    <link rel="stylesheet" href="css/styles.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-     <script src="js/spin.js"></script>
-     <script src="js/searchscripts.js"></script>
-  </head>
-  <body>
-    <h1>LDAP browser</h1>
-    <ul id="spinhere">
-      <li><a href="user.php">Start with yourself</a></li>
-     <li>Search for a user: <input type="text" name="username" onkeyup="doDelayedSearch('user', 'userbox', this)"  autocomplete="off" />
-<br/><div id="userbox"></div></li>
-     <li>Search for a group: <input type="text" name="groupDN" onkeyup="doDelayedSearch('group', 'groupbox', this)"  autocomplete="off" />
-<br/><div id="groupbox"></div></li>
-    </ul>
-  </body>
-</html>
+<?php
+require("header.inc");
+require("footer.inc");
+$h = new header(null, array("js/searchscripts.js"));
+$h->emit();
+?>
+<table id="spinhere">
+    <tr><td colspan="2"><a href="user.php">Start with yourself</a></td></tr>
+    <tr><td>Search for a user</td><td><input type="text" name="username" onkeyup="doDelayedSearch('user', 'userbox', this)"  autocomplete="off" />
+    <br/><div id="userbox"></div></td></tr>
+    <tr><td>Search for a group</td><td><input type="text" name="groupDN" onkeyup="doDelayedSearch('group', 'groupbox', this)"  autocomplete="off" />
+    <br/><div id="groupbox"></div></td></tr>
+</table>
+<?php
+    $f = new footer();
+$f->emit();
+?>
      

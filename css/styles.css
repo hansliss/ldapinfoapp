@@ -1,10 +1,58 @@
 body {
-    background-color: fffef5;
-    font-family: Arial, Helvetica, sans-serif;
+    color: #050505;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+    padding: 0;
+}
+
+clearfix:after {
+    clear: both;
+}
+
+.top-container {
+    height: 142px;
+    background: #f2f2f2;
+}
+
+.top-content {
+    height: 125px;
+    margin-bottom: 0;
+    position: relative;
+    margin: 0 auto;
+    width: 980px;
+}
+
+.top-content .logo {
+    -ms-interpolation-mode: bicubic;
+    display: block;
+    position: absolute;
+    top: 19px;
+    left: 0;
+    max-height: 85px;
+    width: 90px;
+}
+
+.top-content #title {
+    position: absolute;
+    top: 50px;
+    left: 120px;
+}
+
+body #contents {
+    width: 960px;
+    background: #fffefd;
+    border: 1px solid #DDD;
+    padding-left: 35px;
+    padding-bottom: 35px;
 }
 
 a {
     text-decoration: none;
+}
+
+.backlink {
+    font-size: small;
+    font-style: italic;
 }
 
 h1 {
@@ -68,3 +116,5 @@ div#groupbox table td.title, div#userbox table td.title {
 div#groupbox table td.section, div#userbox table td.section {
     width: 350px;
 }
+
+

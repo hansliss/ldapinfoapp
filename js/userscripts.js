@@ -39,3 +39,4 @@
 	    $("#userinfo").html('<h3>Error contacting directory server</h3>');
         });
     }
+
