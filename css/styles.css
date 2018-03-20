@@ -69,6 +69,10 @@ body #contents {
     padding-top: 10px;
     padding-left: 35px;
     padding-bottom: 35px;
+    min-height: 70%;
+    min-height: -webkit-calc(100% - 329px);
+    min-height: -moz-calc(100% - 329px);
+    min-height: calc(100% - 329px);
 }
 
 form.compact {
