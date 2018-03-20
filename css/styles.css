@@ -71,6 +71,11 @@ body #contents {
     padding-bottom: 35px;
 }
 
+form.compact {
+    padding: 0;
+    margin: 0;
+}
+
 a {
     text-decoration: none;
 }
