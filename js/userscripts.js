@@ -11,6 +11,9 @@
 		if (data.title != null) {
 		    str += '<h3>' + data.title + '</h3>';
 		}
+		if (data.department != null) {
+		    str += '<h3>' + data.department + '</h3>';
+		}
 		if (data.mail != null) {
 		    str += '<p>Mail: <a href="mailto:' + data.mail + '">' + data.mail + '</a></p>';
 		}
