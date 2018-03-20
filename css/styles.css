@@ -1,8 +1,13 @@
+html {
+    overflow-x: hidden;
+}
+
 body {
     color: #050505;
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
     padding: 0;
+    margin: 0;
 }
 
 clearfix:after {
@@ -12,11 +17,15 @@ clearfix:after {
 .top-container {
     /* height: 142px;*/
     background: #f2f2f2;
+    margin: 0;
+    padding: 0;
 }
 
 .top-stripe {
     height: 15px;
     background: #be2435;
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -25,7 +34,7 @@ clearfix:after {
     margin-bottom: 0;
     position: relative;
     margin: 0 auto;
-    width: 980px;
+    width: 95%;
 }
 
 .top-content .logo {
@@ -50,7 +59,7 @@ table td {
 }
 
 body #contents {
-    width: 960px;
+    width: 95%;
     background: #fffefd;
     border: 1px solid #DDD;
     margin-top: 5px;
@@ -137,4 +146,53 @@ div#groupbox table td.section, div#userbox table td.section {
     width: 350px;
 }
 
+.wrapper {
+    width: 100%;
+    overflow: hidden;
+}
 
+.sigill {
+    pointer-events: none;
+    position: absolute;
+    right: -623px;
+    width: 850px;
+    background: transparent url(http://www.uu.se/digitalAssets/207/c_207717-l_3-k_sigill-centralised.png) top left no-repeat;
+    height: 595px;
+    top: 142px;
+    z-index: 11;
+}
+
+.footer-site-information {
+    font-size: 0.75em;
+    line-height: 1.75em;
+    margin: 20px 2.5% 10px;
+    text-align: center;
+    width: 95%;
+}
+
+.footer-element {
+    background: #000 url(http://www.uu.se/digitalAssets/207/c_207717-l_3-k_footer-statues.jpg) top center no-repeat;
+    clear: both;
+    color: #fff;
+    position: relative;
+    margin: 0;
+    padding: 30px;
+}
+
+.footer-element a {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.footer-site-entry {
+    white-space: nowrap;
+}
+
+.separator {
+    background-color: #fff;
+    display: inline-block;
+    height: 12px;
+    margin: 0 10px;
+    width: 1px;
+}

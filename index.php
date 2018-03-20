@@ -4,7 +4,7 @@ require("footer.inc");
 $h = new header(null, array("js/searchscripts.js"));
 $h->emit();
 ?>
-<table id="spinhere">
+<table>
     <tr><td colspan="2"><a href="user.php">Start with yourself (<?php print $_SERVER["REMOTE_USER"]; ?>)</a></td></tr>
     <tr><td>Search for a user</td><td><input type="text" name="username" onkeyup="doDelayedSearch('user', 'userbox', this)"  autocomplete="off" />
     <br/><div id="userbox"></div></td></tr>

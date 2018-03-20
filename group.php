@@ -12,7 +12,7 @@ $(document).ready(function(){
 </script>
 <p class="backlink"><a href="index.php">Back to start</a></p>
 <div id="groupinfo"></div>
-<h2 id="spinhere">Members</h2>
+<h2>Members</h2>
 <div id="groupmembers"></div>
 <?php
     $f = new footer();
