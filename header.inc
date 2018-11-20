@@ -26,7 +26,7 @@ class header {
         echo "</head><body>";
 	echo "<div class=\"wrapper\" id=\"spinhere\">";
 	echo "<div class=\"sigill\"></div>";
-	echo "<a href=\"http://www.uu.se\"  title=\"Uppsala universitets startsida\" class=\"logo-wrap\">";
+	echo "<a href=\"https://www.uu.se\"  title=\"Uppsala universitets startsida\" class=\"logo-wrap\">";
 	echo "<div class=\"container top-container clearfix\"><div class=\"top-stripe\"></div><div class=\"top-content\">";
 	echo "<img src=\"images/uu_logo_85.png\" alt=\"Uppsala universitet\" class=\"logo\">";
 	echo "</a>";
