@@ -167,7 +167,7 @@ div#groupbox table td.section, div#userbox table td.section {
     position: absolute;
     right: -623px;
     width: 850px;
-    background: transparent url(http://www.uu.se/digitalAssets/207/c_207717-l_3-k_sigill-centralised.png) top left no-repeat;
+    background: transparent url(https://www.uu.se/digitalAssets/207/c_207717-l_3-k_sigill-centralised.png) top left no-repeat;
     height: 595px;
     top: 142px;
     z-index: 11;
@@ -182,7 +182,7 @@ div#groupbox table td.section, div#userbox table td.section {
 }
 
 .footer-element {
-    background: #000 url(http://www.uu.se/digitalAssets/207/c_207717-l_3-k_footer-statues.jpg) top center no-repeat;
+    background: #000 url(https://www.uu.se/digitalAssets/207/c_207717-l_3-k_footer-statues.jpg) top center no-repeat;
     clear: both;
     color: #fff;
     position: relative;

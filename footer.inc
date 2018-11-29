@@ -22,13 +22,13 @@ class footer {
          echo "Momsregistreringsnummer: SE202100293201";
          echo "<span class=\"separator\"></span></span>";
          echo "<span class=\"footer-site-entry\">";
-         echo "<a href=\"http://www.uu.se/om-uu/kontakta-oss/registrator\">";
+         echo "<a href=\"https://www.uu.se/om-uu/kontakta-oss/registrator\">";
          echo "Registrator</a><span class=\"separator\"></span></span>";
          echo "<span class=\"footer-site-entry\">";
-         echo "<a href=\"http://www.uu.se/om-webbplatsen\">Om sidan</a>";
+         echo "<a href=\"https://www.uu.se/om-webbplatsen\">Om sidan</a>";
          echo "<span class=\"separator\"></span></span>";
          echo "<span class=\"footer-site-entry\">";
-         echo "Sidansvarig:&nbsp;<a href=\"http://katalog.uu.se/empinfo?id=N95-14\">Hans Liss</a>";
+         echo "Sidansvarig:&nbsp;<a href=\"https://katalog.uu.se/empinfo?id=N95-14\">Hans Liss</a>";
          echo "</span></div></div>";
          echo "</body></html>";
       }
