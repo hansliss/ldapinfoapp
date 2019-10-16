@@ -6,8 +6,8 @@ $h->emit();
 ?>
 <script>
 $(document).ready(function(){
-    loadGroup("<?php print preg_replace('[\'"<>]', '', $_REQUEST['dn']); ?>");
-    loadGroupMembers("<?php print preg_replace('[\'"<>]', '', $_REQUEST['dn']); ?>");
+    loadGroup("<?php print preg_replace('/[\'"<>]/', '', $_REQUEST['dn']); ?>");
+    loadGroupMembers("<?php print preg_replace('/[\'"<>]/', '', $_REQUEST['dn']); ?>");
 });
 </script>
 <p class="backlink"><a href="index.php">Back to start</a></p>

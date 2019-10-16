@@ -2,7 +2,7 @@
 require("header.inc");
 require("footer.inc");
 if (array_key_exists('username', $_REQUEST)) {
-    $username = preg_replace('[^a-z0-9-_]', '', $_REQUEST['username']);
+    $username = preg_replace('/[^a-z0-9-_]/', '', $_REQUEST['username']);
 } else {
     $username = preg_replace("/@user.uu.se/", "", $_SERVER['REMOTE_USER']);
 }
